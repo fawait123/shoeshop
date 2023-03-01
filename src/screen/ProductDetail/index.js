@@ -9,6 +9,8 @@ import { Dimensions } from "react-native";
 import Overlay from "../../component/product/overlay";
 import style from "./style";
 import { Animated } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 export default function ProductDetailScreen({ route }) {
   let id = route.params.productID;
@@ -26,7 +28,7 @@ export default function ProductDetailScreen({ route }) {
         data={product.productImageList}
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => <Product key={item.id} item={item} />}
+        renderItem={({ item }) => <Product item={item} />}
         decelerationRate={0.8}
         snapToInterval={Dimensions.get("window").width}
         bounces={false}
@@ -74,6 +76,43 @@ export default function ProductDetailScreen({ route }) {
         ) : (
           <></>
         )}
+      </View>
+
+      <View
+        style={{
+          padding: 20,
+        }}
+      >
+        <View style={style.containerHeader}>
+          <Feather name="shopping-cart" size={24} color="black" />
+          <Text style={style.textHeader}>Shopping</Text>
+        </View>
+        <View style={style.containerTitle}>
+          <Text style={style.textTitle}>{product.productName}</Text>
+          <View style={style.containerLink}>
+            <Feather name="link" size={24} color={COLOURS.blue} />
+          </View>
+        </View>
+        <Text style={style.textDescription}>{product.description}</Text>
+        <View style={style.containerPrice}>
+          <Feather
+            name="dollar-sign"
+            size={16}
+            color={COLOURS.backgroundDark}
+          />
+          <Text
+            style={{
+              color: COLOURS.backgroundDark,
+              fontSize: 16,
+              marginLeft: 10,
+            }}
+          >
+            {product.productPrice}
+          </Text>
+        </View>
+        <TouchableOpacity style={style.containerButton}>
+          <Text style={style.textButton}>ADD TO CART</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
