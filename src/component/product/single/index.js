@@ -5,7 +5,7 @@ import { Image } from "react-native";
 
 export default function Product({ item }) {
   return (
-    <View style={style.container}>
+    <View style={style.container} key={item.id}>
       <Image source={item} style={style.image} />
     </View>
   );
