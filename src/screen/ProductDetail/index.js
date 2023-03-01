@@ -11,7 +11,39 @@ import style from "./style";
 import { Animated } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const addToCart = async (product) => {
+  await AsyncStorage.getItem("cart")
+    .then(async (cart) => {
+      if (cart) {
+        let data = JSON.parse(cart);
+        console.log(data);
+        let check = data.findIndex((el) => el.id === 100);
+        if (check >= 0) {
+          data[check].qty = data[check].qty + 1;
+        } else {
+          data.push({
+            id: product.id,
+            name: product.productName,
+            qty: 1,
+          });
+        }
+      } else {
+        let data = [
+          {
+            id: product.id,
+            name: product.productName,
+            qty: 1,
+          },
+        ];
+        await AsyncStorage.setItem("cart", JSON.stringify(data));
+      }
+    })
+    .catch((err) => {
+      console.log("err", err);
+    });
+};
 export default function ProductDetailScreen({ route }) {
   let id = route.params.productID;
 
@@ -110,7 +142,10 @@ export default function ProductDetailScreen({ route }) {
             {product.productPrice}
           </Text>
         </View>
-        <TouchableOpacity style={style.containerButton}>
+        <TouchableOpacity
+          style={style.containerButton}
+          onPress={() => addToCart(product)}
+        >
           <Text style={style.textButton}>ADD TO CART</Text>
         </TouchableOpacity>
       </View>
